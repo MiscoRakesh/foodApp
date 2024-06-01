@@ -4,6 +4,10 @@ const cors = require("cors");
 const morgan = require("morgan");
 const dotenv = require("dotenv");
 const connectDb = require("./config/db");
+const rateLimiter = require("express-rate-limit");
+let arguments = process.argv;
+
+console.log(arguments);
 
 //dot en configuration
 dotenv.config();
@@ -14,7 +18,15 @@ connectDb();
 //rest object
 const app = express();
 
+//rate limiter
+let limiter = rateLimiter({
+  max: 3,
+  windowMs: 60 * 60 * 1000,
+  message: " Maximum number of attempts made.Please try after 1 hour ",
+});
+
 //middlewares
+app.use("/api", limiter);
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
@@ -35,7 +47,7 @@ app.get("/", (req, res) => {
 });
 
 //PORT
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 9090;
 
 //listen
 app.listen(PORT, () => {

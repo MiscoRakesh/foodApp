@@ -13,7 +13,7 @@ const getUserController = async (req, res) => {
         message: "User Not Found",
       });
     }
-    //hinde password
+    //hide password
     user.password = undefined;
     //resp
     res.status(200).send({
@@ -34,7 +34,7 @@ const getUserController = async (req, res) => {
 // UPDATE USER
 const updateUserController = async (req, res) => {
   try {
-    // find user
+    console.log("UPDATE IN USER PROFILE ===========>\n",req.body);
     const user = await userModel.findById({ _id: req.body.id });
     //validation
     if (!user) {
@@ -73,7 +73,7 @@ const updatePasswordController = async (req, res) => {
     if (!user) {
       return res.status(404).send({
         success: false,
-        message: "Usre Not Found",
+        message: "User Not Found",
       });
     }
     // get data from user
@@ -118,7 +118,7 @@ const resetPasswordController = async (req, res) => {
     if (!email || !newPassword || !answer) {
       return res.status(500).send({
         success: false,
-        message: "Please Privide All Fields",
+        message: "Please Provide All Fields",
       });
     }
     const user = await userModel.findOne({ email, answer });
